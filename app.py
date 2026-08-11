@@ -41,19 +41,19 @@ async def on_member_join(member):
     poppins_big = Font.poppins(size=50, variant="bold")
     poppins_small = Font.poppins(size=30, variant="regular")
 
-    # Cola a foto de perfil no meio da imagem
-    background.paste(profile, (325, 90))
+    # Cola a foto de perfil centralizada e um pouco mais acima
+    background.paste(profile, (325, 70))
 
-    # Escreve o texto de Bem-Vindo e o Nome do Usuário
+    # Escreve o texto de Bem-Vindo e o Nome do Usuário centralizados
     background.text(
-        (400, 260),
+        (400, 240),
         "BEM-VINDO(A)",
         color="white",
         font=poppins_big,
         align="center",
     )
     background.text(
-        (400, 325),
+        (400, 305),
         f"{member.name}",
         color="white",
         font=poppins_small,
@@ -74,4 +74,3 @@ async def on_member_join(member):
 
 # Inicia o bot
 client.run(TOKEN)
-
