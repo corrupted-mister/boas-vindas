@@ -3,12 +3,12 @@ import discord
 from dotenv import load_dotenv
 from easy_pil import Editor, Font, load_image_async
 
-# Carrega as variáveis do arquivo .env
+# Carrega as variáveis de ambiente (Token e ID do Canal)
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 CHANNEL_ID = int(os.getenv("WELCOME_CHANNEL_ID"))
 
-# Configurando os 'intents' para o bot conseguir ver quem entra
+# Configurando os 'intents' para o bot conseguir detectar novos membros
 intents = discord.Intents.default()
 intents.members = True
 
@@ -22,7 +22,7 @@ async def on_ready():
 
 @client.event
 async def on_member_join(member):
-  # Procura o canal pelo ID configurado no .env
+  # Procura o canal pelo ID configurado nas variáveis de ambiente
   channel = client.get_channel(CHANNEL_ID)
   if not channel:
     return
@@ -37,14 +37,14 @@ async def on_member_join(member):
     # Redimensiona a foto de perfil para 150x150 e corta em círculo
     profile = Editor(profile_image).resize((150, 150)).circle_image()
 
-    # Configura as fontes (a biblioteca já traz a fonte Poppins por padrão)
+    # Configura as fontes padrão da biblioteca easy-pil
     poppins_big = Font.poppins(size=50, variant="bold")
     poppins_small = Font.poppins(size=30, variant="regular")
 
-    # Cola a foto de perfil centralizada e um pouco mais acima
+    # Cola a foto de perfil centralizada no topo
     background.paste(profile, (325, 70))
 
-    # Escreve o texto de Bem-Vindo e o Nome do Usuário centralizados
+    # Escreve o texto de Bem-Vindo e o Nome do Usuário perfeitamente centralizados
     background.text(
         (400, 240),
         "BEM-VINDO(A)",
@@ -60,10 +60,10 @@ async def on_member_join(member):
         align="center",
     )
 
-    # Converte a imagem pronta para um formato que o Discord aceita
+    # Converte a imagem pronta para um formato aceito pelo Discord
     file = discord.File(fp=background.image_bytes, filename="welcome.png")
 
-    # Envia a mensagem com a imagem no canal
+    # Envia a mensagem mencionando o usuário com a imagem anexada
     await channel.send(
         f"Olá {member.mention}! Seja muito bem-vindo(a) ao servidor!", file=file
     )
@@ -72,5 +72,5 @@ async def on_member_join(member):
     print(f"Ocorreu um erro ao gerar a imagem: {e}")
 
 
-# Inicia o bot
+# Inicia o bot utilizando o token de segurança
 client.run(TOKEN)
